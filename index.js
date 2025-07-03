@@ -32,6 +32,38 @@ app.post('/users', async (req, res) => {
     }
 });
 
+app.post('/login', async (request, response) => {
+
+    const { email, password} = request.body;
+
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+
+        if (result.rows.length === 0){
+            return response.status(401).json({message: 'Nieprawidłowy email lub hasło.'});
+        }
+
+        const user = result.rows[0];
+
+        if (user.password !== password) {
+            return response.status(401).json({message: 'Nieprawidłowy email lub hasło.'});
+        }
+
+        response.json({
+            message: 'Zalogowano pomyślnie',
+            user: {
+                id: user.id,
+                email: user.email,
+
+            },
+        });
+    } catch (error) {
+        console.error('Błąd podczas logowania: ', error);
+        response.status(500).json({message: 'Błąd serwera'});
+    }
+    
+});
+
 app.get('/', (req, res) => {
     res.json({message: "Działa Render.com!"});
 });
