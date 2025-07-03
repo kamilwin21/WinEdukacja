@@ -34,7 +34,7 @@ app.post('/users', async (req, res) => {
 
 app.post('/login', async (request, response) => {
 
-    const { email, password} = request.body;
+    const { email, password } = request.body;
 
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -53,8 +53,8 @@ app.post('/login', async (request, response) => {
             message: 'Zalogowano pomyślnie',
             user: {
                 id: user.id,
+                name: user.name,
                 email: user.email,
-
             },
         });
     } catch (error) {
