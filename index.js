@@ -20,7 +20,7 @@ app.get('/users', async (req, res) => {
 });
 
 app.post('/users', async (req, res) => {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
     try {
         const result = await pool.query(
             'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *',
