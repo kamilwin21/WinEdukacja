@@ -12,7 +12,7 @@ app.use(cors({
 
 app.get('/users', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM users');
+        const result = await pool.query("SELECT * FROM users u JOIN user_roles ur ON u.id = ur.user_id JOIN roles r ON ur.role_id = r.id LEFT JOIN student_class sc ON u.id = cs.user_id LEFT JOIN classes c ON sc.class_id = c.id WHERE r.name = 'Uczeń' ");
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({error: err.message});
