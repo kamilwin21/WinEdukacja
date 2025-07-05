@@ -23,7 +23,7 @@ app.post('/users', async (req, res) => {
     const { email, password, first_name, last_name } = req.body;
     try {
         const result = await pool.query(
-            'INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4, false) RETURNING *',
+            'INSERT INTO users (email, password, first_name, last_name, is_active) VALUES ($1, $2, $3, $4, false) RETURNING *',
             [email, password, first_name, last_name]
         );
         res.status(201).json(result.rows[0]);
