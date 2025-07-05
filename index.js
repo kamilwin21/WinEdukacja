@@ -20,11 +20,11 @@ app.get('/users', async (req, res) => {
 });
 
 app.post('/users', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, first_name, last_name } = req.body;
     try {
         const result = await pool.query(
-            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *',
-            [name, email, password]
+            'INSERT INTO users (email, password, first_name, last_name) VALUES ($1, $2, $3, $4, false) RETURNING *',
+            [name, email, password, first_name, last_name]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -55,6 +55,8 @@ app.post('/login', async (request, response) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name
             },
         });
     } catch (error) {
