@@ -12,7 +12,14 @@ app.use(cors({
 
 app.get('/users', async (req, res) => {
     try {
-        const result = await pool.query("SELECT u.*, r.*, ur.*, sc.*, c.* FROM users u JOIN user_roles ur ON u.id = ur.user_id JOIN roles r ON ur.role_id = r.id LEFT JOIN student_class sc ON u.id = sc.user_id LEFT JOIN classes c ON sc.class_id = c.id WHERE r.name = 'Uczeń' ");
+        const result = await pool.query(
+            "SELECT u.email, u.created_at, u.first_name, u.last_name, u.is_active, c.name AS class_name, c.school_year, " +
+            "r.name AS role_name " +
+            "FROM users u JOIN student_class sc ON u.id = sc.user_id " +
+            "JOIN user_roles ur ON u.id = ur.user_id " +
+            "LEFT JOIN classes c ON sc.class_id = c.id " +
+            "LEFT JOIN roles r ON ur.role_id = r.id"
+        );
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({error: err.message});
